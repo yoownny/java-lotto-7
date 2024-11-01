@@ -5,5 +5,6 @@ public class Application {
         LottoGame game = new LottoGame();
         game.purchaseLotto();
         game.inputWinningNumbers();
+        game.inputBonusNumber();
     }
 }

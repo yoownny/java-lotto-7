@@ -27,7 +27,13 @@ public class LottoGame {
         System.out.println();
         System.out.println("당첨 번호를 입력해 주세요.");
         String input = Console.readLine();
+    }
 
+    public void inputBonusNumber(){
+        System.out.println();
+        System.out.println("보너스 번호를 입력해 주세요.");
+        String input = Console.readLine();
+        int bonus = Integer.parseInt(input);
     }
 
 }
