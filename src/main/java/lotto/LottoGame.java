@@ -3,15 +3,17 @@ package lotto;
 import camp.nextstep.edu.missionutils.Console;
 import camp.nextstep.edu.missionutils.Randoms;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 public class LottoGame {
     private static final int PRICE_PER_LOTTO = 1000;
     private final List<Lotto> tickets = new ArrayList<>();
     private List<Integer> winningNumbers;
     private int bonusNumber;
+    private Map<LottoRank, Integer> results;
 
     public void purchaseLotto() {
         System.out.println("구입금액을 입력해 주세요.");
@@ -19,8 +21,7 @@ public class LottoGame {
         int amount = Integer.parseInt(input);
         int count = amount / PRICE_PER_LOTTO;
 
-        System.out.println();
-        System.out.println(count + "개를 구매했습니다.");
+        System.out.println("\n" + count + "개를 구매했습니다.");
         for (int i = 0; i < count; i++) {
             List<Integer> numbers = Randoms.pickUniqueNumbersInRange(1, 45, 6);
             Collections.sort(numbers);
@@ -30,25 +31,59 @@ public class LottoGame {
     }
 
     public void inputWinningNumbers() {
-        System.out.println();
-        System.out.println("당첨 번호를 입력해 주세요.");
+        System.out.println("\n당첨 번호를 입력해 주세요.");
         String input = Console.readLine();
-        this.winningNumbers = Arrays.stream(input.split(","))
-                .map(String::trim)
-                .map(Integer::parseInt)
-                .toList();
+
+        String[] splitNumbers = input.split(",");
+        List<Integer> numbers = new ArrayList<>();
+        for (String numberStr : splitNumbers) {
+            int number = Integer.parseInt(numberStr.trim());
+            numbers.add(number);
+        }
+        this.winningNumbers = numbers;
     }
 
     public void inputBonusNumber() {
-        System.out.println();
-        System.out.println("보너스 번호를 입력해 주세요.");
+        System.out.println("\n보너스 번호를 입력해 주세요.");
         String input = Console.readLine();
         this.bonusNumber = Integer.parseInt(input);
     }
 
-    public void printResult(){
-        System.out.println();
-        System.out.println("");
+    public void printResult() {
+        results = calculateResults();
+        System.out.println("\n당첨 통계\n---");
+        for (LottoRank rank : LottoRank.values()) {
+            if (rank != LottoRank.NONE) {
+                System.out.printf("%s (%,d원) - %d개\n",
+                        rank.getDescription(),
+                        rank.getPrize(),
+                        results.get(rank));
+            }
+        }
+    }
+
+    private Map<LottoRank, Integer> calculateResults() {
+        Map<LottoRank, Integer> results = new EnumMap<>(LottoRank.class);
+        for (LottoRank rank : LottoRank.values()) {
+            results.put(rank, 0);
+        }
+        for (Lotto ticket : tickets) {
+            int matchCount = countMatches(ticket);
+            boolean BonusMatch = ticket.contains(bonusNumber);
+            LottoRank rank = LottoRank.getLottoRank(matchCount, BonusMatch);
+            results.put(rank, results.get(rank) + 1);
+        }
+        return results;
+    }
+
+    private int countMatches(Lotto ticket) {
+        int count = 0;
+        for (int number : winningNumbers) {
+            if (ticket.contains(number)) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }

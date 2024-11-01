@@ -6,5 +6,6 @@ public class Application {
         game.purchaseLotto();
         game.inputWinningNumbers();
         game.inputBonusNumber();
+        game.printResult();
     }
 }
