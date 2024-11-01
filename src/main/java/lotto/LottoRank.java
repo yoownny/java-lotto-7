@@ -1,7 +1,6 @@
 package lotto;
 
 public enum LottoRank {
-    ZERO(0, 0, "미당첨"),
     THREE(3, 5_000, "3개 일치"),
     FOUR(4, 50_000, "4개 일치"),
     FIVE(5, 1_500_000, "5개 일치"),
@@ -19,9 +18,6 @@ public enum LottoRank {
     }
 
     public static LottoRank getLottoRank(int matchCount, int prize) {
-        if (matchCount == 0) {
-            return ZERO;
-        }
         if (matchCount == 3) {
             return THREE;
         }

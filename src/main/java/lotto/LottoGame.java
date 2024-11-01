@@ -46,4 +46,9 @@ public class LottoGame {
         this.bonusNumber = Integer.parseInt(input);
     }
 
+    public void printResult(){
+        System.out.println();
+        System.out.println("");
+    }
+
 }
