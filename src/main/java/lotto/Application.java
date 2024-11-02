@@ -9,6 +9,6 @@ public class Application {
         LottoResult result = new LottoResult();
 
         List<Lotto> tickets = machine.purchaseLotto();
-
+        winningNumber.input();
     }
 }
