@@ -10,5 +10,6 @@ public class Application {
 
         List<Lotto> tickets = machine.purchaseLotto();
         winningNumber.input();
+        result.printResult(tickets, winningNumber);
     }
 }

@@ -1,21 +1,52 @@
 package lotto;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public class LottoResult {
-    private static final int PRICE_PER_LOTTO = 1000;
-    private final List<Lotto> tickets = new ArrayList<>();
-    private List<Integer> winningNumbers;
-    private int bonusNumber;
     private Map<LottoRank, Integer> results;
-    private double profit;
-    private int amount;
 
-    public void printResult() {
-        results = calculateResults();
+    public void printResult(List<Lotto> tickets, WinningNumber winningNumber) {
+        results = calculateResults(tickets, winningNumber);
+        printWinningStatistics();
+        printProfitRate(tickets.size());
+    }
+
+    private Map<LottoRank, Integer> calculateResults(List<Lotto> tickets, WinningNumber winningNumber) {
+        Map<LottoRank, Integer> rankCounts = initializeResults();
+        for (Lotto ticket : tickets) {
+            updateResult(rankCounts, ticket, winningNumber);
+        }
+        return rankCounts;
+    }
+
+    private Map<LottoRank, Integer> initializeResults() {
+        Map<LottoRank, Integer> rankCounts = new EnumMap<>(LottoRank.class);
+        for (LottoRank rank : LottoRank.values()) {
+            rankCounts.put(rank, 0);
+        }
+        return rankCounts;
+    }
+
+    private void updateResult(Map<LottoRank, Integer> rankCounts, Lotto ticket, WinningNumber winningNumber) {
+        int matchCount = countMatches(ticket, winningNumber.getNumbers());
+        boolean bonusMatch = ticket.contains(winningNumber.getBonusNumber());
+        LottoRank rank = LottoRank.getLottoRank(matchCount, bonusMatch);
+        rankCounts.put(rank, rankCounts.get(rank) + 1);
+    }
+
+    private int countMatches(Lotto ticket, List<Integer> winningNumbers) {
+        int count = 0;
+        for (int number : winningNumbers) {
+            if (ticket.contains(number)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void printWinningStatistics() {
         System.out.println("\n당첨 통계\n---");
         for (LottoRank rank : LottoRank.values()) {
             if (rank != LottoRank.NONE) {
@@ -25,43 +56,24 @@ public class LottoResult {
                         results.get(rank));
             }
         }
-        profit = calculateProfit();
-        System.out.printf("총 수익률은 %.1f입니다.", profit);
     }
 
-    private double calculateProfit() {
-        double sum = 0;
-        double result = 0;
+    private void printProfitRate(int ticketCount) {
+        double profitRate = calculateProfitRate(ticketCount);
+        System.out.printf("총 수익률은 %.1f%%입니다.\n", profitRate);
+    }
+
+    private double calculateProfitRate(int ticketCount) {
+        long totalPrize = calculateTotalPrize();
+        int totalAmount = ticketCount * 1000;
+        return (double) totalPrize / totalAmount * 100;
+    }
+
+    private long calculateTotalPrize() {
+        long sum = 0;
         for (LottoRank rank : LottoRank.values()) {
-            if (results.get(rank) != 0) {
-                sum += rank.getPrize();
-            }
+            sum += (long) rank.getPrize() * results.get(rank);
         }
-        result = sum / amount * 100;
-        return result;
-    }
-
-    private Map<LottoRank, Integer> calculateResults() {
-        Map<LottoRank, Integer> results = new EnumMap<>(LottoRank.class);
-        for (LottoRank rank : LottoRank.values()) {
-            results.put(rank, 0);
-        }
-        for (Lotto ticket : tickets) {
-            int matchCount = countMatches(ticket);
-            boolean BonusMatch = ticket.contains(bonusNumber);
-            LottoRank rank = LottoRank.getLottoRank(matchCount, BonusMatch);
-            results.put(rank, results.get(rank) + 1);
-        }
-        return results;
-    }
-
-    private int countMatches(Lotto ticket) {
-        int count = 0;
-        for (int number : winningNumbers) {
-            if (ticket.contains(number)) {
-                count++;
-            }
-        }
-        return count;
+        return sum;
     }
 }
