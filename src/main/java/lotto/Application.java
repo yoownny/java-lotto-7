@@ -1,11 +1,14 @@
 package lotto;
 
+import java.util.List;
+
 public class Application {
     public static void main(String[] args) {
-        LottoGame game = new LottoGame();
-        game.purchaseLotto();
-        game.inputWinningNumbers();
-        game.inputBonusNumber();
-        game.printResult();
+        LottoMachine machine = new LottoMachine();
+        WinningNumber winningNumber = new WinningNumber();
+        LottoResult result = new LottoResult();
+
+        List<Lotto> tickets = machine.purchaseLotto();
+
     }
 }
