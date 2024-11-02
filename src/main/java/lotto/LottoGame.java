@@ -14,11 +14,13 @@ public class LottoGame {
     private List<Integer> winningNumbers;
     private int bonusNumber;
     private Map<LottoRank, Integer> results;
+    private double profit;
+    private int amount;
 
     public void purchaseLotto() {
         System.out.println("구입금액을 입력해 주세요.");
         String input = Console.readLine();
-        int amount = Integer.parseInt(input);
+        amount = Integer.parseInt(input);
         int count = amount / PRICE_PER_LOTTO;
 
         System.out.println("\n" + count + "개를 구매했습니다.");
@@ -60,6 +62,20 @@ public class LottoGame {
                         results.get(rank));
             }
         }
+        profit = calculateProfit();
+        System.out.printf("총 수익률은 %.1f입니다.",profit);
+    }
+
+    private double calculateProfit() {
+        double sum = 0;
+        double result = 0;
+        for(LottoRank rank : LottoRank.values()) {
+            if(results.get(rank) != 0) {
+                sum += rank.getPrize();
+            }
+        }
+        result = sum / amount * 100 ;
+        return result;
     }
 
     private Map<LottoRank, Integer> calculateResults() {
