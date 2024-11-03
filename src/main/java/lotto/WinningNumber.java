@@ -1,8 +1,5 @@
 package lotto;
 
-import static lotto.Lotto.MAX_NUMBER;
-import static lotto.Lotto.MIN_NUMBER;
-
 import camp.nextstep.edu.missionutils.Console;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,29 +18,12 @@ public class WinningNumber {
         while (true) {
             try {
                 String input = Console.readLine();
-                winningLotto = new Lotto(parseNumbers(input));
+                setWinningLotto(parseInput(input));
                 break;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }
-    }
-
-    private List<Integer> parseNumbers(String input) {
-        List<Integer> numbers = new ArrayList<>();
-        String[] splitNumbers = input.split(",");
-
-        for (String numberStr : splitNumbers) {
-            String trimmed = numberStr.trim();
-            if (!trimmed.isEmpty()) {
-                try {
-                    numbers.add(Integer.parseInt(trimmed));
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("[ERROR] 숫자만 입력 가능합니다.");
-                }
-            }
-        }
-        return numbers;
     }
 
     private void inputBonusNumber() {
@@ -51,22 +31,7 @@ public class WinningNumber {
         while (true) {
             try {
                 String input = Console.readLine().trim();
-                int number;
-                try {
-                    number = Integer.parseInt(input);
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("[ERROR] 숫자만 입력 가능합니다.");
-                }
-
-                if (number < MIN_NUMBER || number > MAX_NUMBER) {
-                    throw new IllegalArgumentException("[ERROR] 로또 번호는 1에서 45 사이의 숫자여야 합니다.");
-                }
-
-                if (winningLotto.contains(number)) {
-                    throw new IllegalArgumentException("[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.");
-                }
-
-                bonusNumber = number;
+                setBonusNumber(parseAndValidateBonusNumber(input));
                 break;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -74,6 +39,49 @@ public class WinningNumber {
         }
     }
 
+    public List<Integer> parseInput(String input) {
+        List<Integer> numbers = new ArrayList<>();
+        String[] splitNumbers = input.split(",");
+
+        for (String numberStr : splitNumbers) {
+            String trimmed = numberStr.trim();
+            if (!trimmed.isEmpty()) {
+                numbers.add(parseNumber(trimmed));
+            }
+        }
+        return numbers;
+    }
+
+    private int parseNumber(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("[ERROR] 숫자만 입력 가능합니다.");
+        }
+    }
+
+    public void setWinningLotto(List<Integer> numbers) {
+        this.winningLotto = new Lotto(numbers);
+    }
+
+    public int parseAndValidateBonusNumber(String input) {
+        int number = parseNumber(input);
+        validateBonusNumberRange(number);
+        validateBonusNumberDuplicate(number);
+        return number;
+    }
+
+    private void validateBonusNumberRange(int number) {
+        if (number < Lotto.MIN_NUMBER || number > Lotto.MAX_NUMBER) {
+            throw new IllegalArgumentException("[ERROR] 로또 번호는 1에서 45 사이의 숫자여야 합니다.");
+        }
+    }
+
+    private void validateBonusNumberDuplicate(int number) {
+        if (winningLotto.contains(number)) {
+            throw new IllegalArgumentException("[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.");
+        }
+    }
 
     public List<Integer> getNumbers() {
         return winningLotto.getNumbers();
@@ -81,5 +89,9 @@ public class WinningNumber {
 
     public int getBonusNumber() {
         return bonusNumber;
+    }
+
+    public void setBonusNumber(int number) {
+        this.bonusNumber = number;
     }
 }
