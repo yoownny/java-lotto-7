@@ -65,7 +65,7 @@ public class LottoResult {
         System.out.printf("총 수익률은 %.1f%%입니다.\n", profitRate);
     }
 
-    private double calculateProfitRate(int ticketCount) {
+    double calculateProfitRate(int ticketCount) {
         long totalPrize = calculateTotalPrize();
         int totalAmount = ticketCount * PRICE_PER_LOTTO;
         return (double) totalPrize / totalAmount * 100;
