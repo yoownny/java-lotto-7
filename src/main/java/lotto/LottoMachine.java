@@ -8,7 +8,6 @@ import java.util.List;
 
 public class LottoMachine {
     private static final int PRICE_PER_LOTTO = 1000;
-    InputValidator validator = new InputValidator();
 
     public List<Lotto> purchaseLotto() {
         int amount = inputAmount();
@@ -18,8 +17,22 @@ public class LottoMachine {
     private int inputAmount() {
         System.out.println("구입금액을 입력해 주세요.");
         String amount = Console.readLine();
-        validator.inputamount(amount);
+        validateAmount(amount);
         return Integer.parseInt(amount);
+    }
+
+    private void validateAmount(String input) {
+        try {
+            int amount = Integer.parseInt(input);
+            if (amount <= 0) {
+                throw new IllegalArgumentException("[ERROR] 구입금액은 0보다 커야 합니다.");
+            }
+            if (amount % PRICE_PER_LOTTO != 0) {
+                throw new IllegalArgumentException("[ERROR] 로또 구입금액은 1,000원 단위여야 합니다.");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("[ERROR] 숫자만 입력 가능합니다.");
+        }
     }
 
     private List<Lotto> generateTickets(int count) {

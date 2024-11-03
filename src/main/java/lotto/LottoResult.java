@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LottoResult {
+    private static final int PRICE_PER_LOTTO = 1000;
     private Map<LottoRank, Integer> results;
 
     public void printResult(List<Lotto> tickets, WinningNumber winningNumber) {
@@ -65,7 +66,7 @@ public class LottoResult {
 
     private double calculateProfitRate(int ticketCount) {
         long totalPrize = calculateTotalPrize();
-        int totalAmount = ticketCount * 1000;
+        int totalAmount = ticketCount * PRICE_PER_LOTTO;
         return (double) totalPrize / totalAmount * 100;
     }
 
