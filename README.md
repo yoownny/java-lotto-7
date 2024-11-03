@@ -54,14 +54,6 @@
     - 1~45 범위 초과
     - 당첨 번호와 중복
 
-### 💡 세부 요구사항
-
-- 모든 예외는 `[ERROR]` 접두어와 함께 출력
-- `IllegalArgumentException` 사용
-- Lotto 클래스의 기본 구조 유지
-- Random 값은 `Randoms.pickUniqueNumbersInRange()` 사용
-- 사용자 입력은 `Console.readLine()` 사용
-
 ### ✔ 실행 결과 예시
 
 ```
@@ -95,13 +87,28 @@
 
 ```
 
-## 🎯 프로그래밍 요구사항
+## 🎯 요구사항
 
-- Jandent depth 2까지만 허용
-- 3항 연산자 사용 금지
-- else 예약어 사용 금지
-- 메서드 길이 15라인 이내
-- Java Enum 사용
-- 단위 테스트 작성 (UI 로직 제외)
-- 사용자가 잘못된 값을 입력할 경우 IllegalArgumentException을 발생
-- "[ERROR]"로 시작하는 에러 메시지를 출력 후 그 부분부터 입력을 다시 받음
+✅ 기능 요구사항
+- 로또 번호 범위 1~45 검증
+- 중복되지 않는 6개 숫자 뽑기
+- 보너스 번호 구현
+- 당첨 등수와 상금 기준 정확히 구현
+- 로또 1장당 1,000원 가격 적용
+- 당첨 내역 및 수익률 출력
+- IllegalArgumentException 처리 및 [ERROR] 메시지 출력
+
+✅ 프로그래밍 요구사항
+- indent depth 3 이하 유지
+- 3항 연산자 미사용
+- 함수가 한 가지 일만 수행
+- 함수 길이 15라인 이하 유지
+- else 키워드 미사용
+- Java Enum 적용 (LottoRank)
+- Randoms.pickUniqueNumbersInRange() 사용
+- Console.readLine() 사용
+
+✅ Lotto 클래스 요구사항
+- 제공된 Lotto 클래스 기반으로 구현
+- numbers 외 추가 필드 없음
+- numbers의 private 접근 제어자 유지
