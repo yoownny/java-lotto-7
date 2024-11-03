@@ -8,6 +8,7 @@ import java.util.List;
 
 public class LottoMachine {
     private static final int PRICE_PER_LOTTO = 1000;
+    InputValidator validator = new InputValidator();
 
     public List<Lotto> purchaseLotto() {
         int amount = inputAmount();
@@ -16,7 +17,9 @@ public class LottoMachine {
 
     private int inputAmount() {
         System.out.println("구입금액을 입력해 주세요.");
-        return Integer.parseInt(Console.readLine());
+        String amount = Console.readLine();
+        validator.inputamount(amount);
+        return Integer.parseInt(amount);
     }
 
     private List<Lotto> generateTickets(int count) {

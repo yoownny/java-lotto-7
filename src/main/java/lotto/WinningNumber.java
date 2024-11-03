@@ -7,6 +7,7 @@ import java.util.List;
 public class WinningNumber {
     private List<Integer> numbers;
     private int bonusNumber;
+    InputValidator validator = new InputValidator();
 
     public void input() {
         inputWinningNumbers();
@@ -15,12 +16,16 @@ public class WinningNumber {
 
     private void inputWinningNumbers() {
         System.out.println("\n당첨 번호를 입력해 주세요.");
-        numbers = parseNumbers(Console.readLine());
+        String winning = Console.readLine();
+        validator.inputWinning(winning);
+        numbers = parseNumbers(winning);
     }
 
     private void inputBonusNumber() {
         System.out.println("\n보너스 번호를 입력해 주세요.");
-        bonusNumber = Integer.parseInt(Console.readLine());
+        String bonus = Console.readLine();
+        validator.inputBonus(bonus);
+        bonusNumber = Integer.parseInt(bonus);
     }
 
     private List<Integer> parseNumbers(String input) {
