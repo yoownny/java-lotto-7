@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class LottoMachine {
-    private static final int PRICE_PER_LOTTO = 1000;
+    public static final int PRICE_PER_LOTTO = 1000;
 
     public List<Lotto> purchaseLotto() {
         int amount = inputAmount();

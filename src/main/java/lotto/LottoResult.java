@@ -1,11 +1,12 @@
 package lotto;
 
+import static lotto.LottoMachine.PRICE_PER_LOTTO;
+
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public class LottoResult {
-    private static final int PRICE_PER_LOTTO = 1000;
     private Map<LottoRank, Integer> results;
 
     public void printResult(List<Lotto> tickets, WinningNumber winningNumber) {
