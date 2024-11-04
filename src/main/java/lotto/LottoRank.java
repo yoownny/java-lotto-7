@@ -8,7 +8,6 @@ public enum LottoRank {
     FIVE_BONUS(5, 30_000_000, "5개 일치, 보너스 볼 일치"),
     SIX(6, 2_000_000_000, "6개 일치");
 
-
     private final int matchCount;
     private final int prize;
     private final String description;
