@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class LottoResult {
     private Map<LottoRank, Integer> results;
-
     public void printResult(List<Lotto> tickets, WinningNumber winningNumber) {
         results = calculateResults(tickets, winningNumber);
         printWinningStatistics();

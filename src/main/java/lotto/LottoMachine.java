@@ -19,40 +19,51 @@ public class LottoMachine {
         while (true) {
             try {
                 String input = Console.readLine();
-
-                int amount;
-                try {
-                    amount = Integer.parseInt(input);
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("[ERROR] 숫자만 입력 가능합니다.");
-                }
-
-                if (amount <= 0) {
-                    throw new IllegalArgumentException("[ERROR] 구입금액은 0보다 커야 합니다.");
-                }
-                if (amount % PRICE_PER_LOTTO != 0) {
-                    throw new IllegalArgumentException("[ERROR] 로또 구입금액은 1,000원 단위여야 합니다.");
-                }
-                return amount;
+                return parseAndValidateAmount(input);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    private List<Lotto> generateTickets(int count) {
-        List<Lotto> tickets = new ArrayList<>();
-        System.out.println("\n" + count + "개를 구매했습니다.");
+    public int parseAndValidateAmount(String input) {
+        int amount = parseAmount(input);
+        validateAmount(amount);
+        return amount;
+    }
 
-        for (int i = 0; i < count; i++) {
-            Lotto ticket = createLotto();
-            tickets.add(ticket);
-            System.out.println(ticket.getNumbers());
+    private int parseAmount(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("[ERROR] 숫자만 입력 가능합니다.");
         }
+    }
+
+    private void validateAmount(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("[ERROR] 구입금액은 0보다 커야 합니다.");
+        }
+        if (amount % PRICE_PER_LOTTO != 0) {
+            throw new IllegalArgumentException("[ERROR] 로또 구입금액은 1,000원 단위여야 합니다.");
+        }
+    }
+
+    public List<Lotto> generateTickets(int count) {
+        List<Lotto> tickets = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            tickets.add(createLotto());
+        }
+        printTickets(tickets);
         return tickets;
     }
 
-    private Lotto createLotto() {
+    private void printTickets(List<Lotto> tickets) {
+        System.out.println("\n" + tickets.size() + "개를 구매했습니다.");
+        tickets.forEach(ticket -> System.out.println(ticket.getNumbers()));
+    }
+
+    protected Lotto createLotto() {
         List<Integer> numbers = new ArrayList<>(Randoms.pickUniqueNumbersInRange(1, 45, 6));
         Collections.sort(numbers);
         return new Lotto(numbers);
